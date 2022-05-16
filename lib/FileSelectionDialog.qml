@@ -28,9 +28,9 @@ Item {
     }
 
     function select(file) {
-      root.file = "file://" + file
+      root.file = "file:///" + file
         // @disable-check M110
-        root.folder = "file://" + new String(file).substring(
+        root.folder = "file:///" + new String(file).substring(
             0, file.lastIndexOf('/'))
       root.selected = true
     }
