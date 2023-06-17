@@ -4,6 +4,7 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QLoggingCategory>
+#include <QRegularExpression>
 
 Q_LOGGING_CATEGORY(filewatcherCategory, "filewatcher");
 
@@ -81,15 +82,6 @@ void FileWatcher::setNameFilters(const QStringList& nameFilters)
     m_nameFilters = nameFilters;
     emit nameFiltersChanged(m_nameFilters);
 
-    updateRegExps();
-}
-
-void FileWatcher::updateRegExps()
-{
-    m_regExps.clear();
-    for (QString& filter : m_nameFilters) {
-        m_regExps.append(QRegExp(filter, Qt::CaseInsensitive, QRegExp::WildcardUnix));
-    }
 }
 
 bool FileWatcher::updateWatchedFile()
@@ -126,12 +118,18 @@ bool FileWatcher::updateWatchedFile()
             const auto& file = it.next();
             const QString extension = it.fileInfo().completeSuffix();
             bool filtered = false;
-            for (QRegExp& regExp : m_regExps) {
-                if (regExp.exactMatch(extension)) {
+            for (QString& filter : m_nameFilters)
+            {
+                QRegularExpression re(filter);
+                auto m = re.match(extension);
+                if (m.hasMatch())
+                {
                     filtered = true;
                     break;
                 }
+
             }
+
             if ((it.fileName() == QLatin1String("..")) || (it.fileName() == QLatin1String("."))
                 || filtered) {
                 continue;

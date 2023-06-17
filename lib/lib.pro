@@ -38,7 +38,6 @@ qmldir.path = $$installPath
 target.path = $$installPath
 INSTALLS += target qmldir
 
-
 RESOURCES += \
     com_machinekoder_livecoding.qrc \
     livewindow.qrc

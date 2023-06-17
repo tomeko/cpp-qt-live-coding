@@ -40,7 +40,6 @@ private:
     bool m_recursive;
     QFileSystemWatcher m_fileSystemWatcher;
     QStringList m_nameFilters;
-    QList<QRegExp> m_regExps;
 
     void updateRegExps();
 
